@@ -1,0 +1,38 @@
+version: '3'
+services:
+  jobmanager:
+    image: apache/flink:1.20.0-scala_2.12
+    container_name: flink-jobmanager
+    ports:
+      - "8081:8081"  # Flink Web UI
+      - "6123:6123"  # JobManager RPC
+    environment:
+      - JOB_MANAGER_RPC_ADDRESS=jobmanager
+    command: jobmanager
+    volumes:
+      - ./target/flink-processing-1.0-SNAPSHOT.jar:/opt/flink_job.jar
+    networks:
+      - kafka_kafka-network
+
+  taskmanager:
+    image: apache/flink:1.20.0-scala_2.12
+    container_name: flink-taskmanager
+    depends_on:
+      - jobmanager
+    environment:
+      - JOB_MANAGER_RPC_ADDRESS=jobmanager  # Points to JobManager
+    command: taskmanager
+    networks:
+      - kafka_kafka-network
+
+  flinkjob:
+    build: .
+    container_name: flink-job
+    depends_on:
+      - jobmanager
+    networks:
+      - kafka_kafka-network
+
+networks:
+  kafka_kafka-network:  # ✅ Ensure external network is properly defined
+    external: true

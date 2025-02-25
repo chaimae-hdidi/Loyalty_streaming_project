@@ -1,0 +1,12 @@
+version: "3.8"
+
+services:
+  transaction-producer:
+    build: . 
+    container_name: transaction-producer
+    networks:
+      - kafka_loyalty-network
+
+networks:
+  kafka_loyalty-network:
+    external: true 
