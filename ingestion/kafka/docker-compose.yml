@@ -1,0 +1,63 @@
+version: "3.8"
+
+services:
+  zookeeper:
+    image: bitnami/zookeeper:latest
+    container_name: zookeeper
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes  
+    ports:
+      - "2181:2181"
+    networks:
+      - loyalty-network
+
+
+  kafka:
+    image: bitnami/kafka:latest
+    container_name: kafka
+    environment:
+      KAFKA_LISTENERS: INSIDE://kafka:9093  # Define the broker listener
+      KAFKA_ADVERTISED_LISTENERS: INSIDE://kafka:9093  # Advertised listener for clients
+      KAFKA_LISTENER_SECURITY_PROTOCOL: PLAINTEXT  # Set the security protocol
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT  # Define security protocol map for INSIDE listener
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181  # Connect to ZooKeeper
+      KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE  # Set inter-broker listener name
+
+    ports:
+      - "9093:9093"  # Expose Kafka port
+    networks:
+      - loyalty-network
+
+  kafka_ui:
+      image: provectuslabs/kafka-ui:latest
+      container_name: kafka_ui
+      environment:
+        KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: "kafka:9093"  
+        KAFKA_CLUSTERS_0_ZOOKEEPER: "zookeeper:2181"  
+      ports:
+        - "8082:8080" 
+      networks:
+        - loyalty-network
+      depends_on:
+        - kafka 
+
+  connect:
+    image: debezium/connect:3.0.0.Final
+    container_name: connect
+    environment:
+      BOOTSTRAP_SERVERS: kafka:9093  # 🔥 Kafka in Docker
+      GROUP_ID: "1"
+      CONFIG_STORAGE_TOPIC: "connect-configs"
+      OFFSET_STORAGE_TOPIC: "connect-offsets"
+      STATUS_STORAGE_TOPIC: "connect-status"
+    ports:
+      - "8083:8083"
+    depends_on:
+      - kafka
+    networks:
+      - loyalty-network
+  
+
+networks:
+  loyalty-network:
+    driver: bridge

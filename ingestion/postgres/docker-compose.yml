@@ -6,11 +6,24 @@ services:
     container_name: loyalty_postgres
     env_file:
       - .env  
+    environment:
+      PG_MODE: primary
+      POSTGRES_HOST_AUTH_METHOD: trust
+      POSTGRES_INITDB_ARGS: "--wal-level=logical"
+      MAX_REPLICATION_SLOTS: 4
+      MAX_WAL_SENDERS: 4
+      
     ports:
       - "5432:5432" 
     volumes:
       - postgres_data:/var/lib/postgresql/data  # Persist data
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql  # Optional: Preload tables
+    networks:
+      - kafka_loyalty-network
 
 volumes:
   postgres_data:
+
+networks:
+  kafka_loyalty-network:
+    external: true 
