@@ -1,0 +1,6 @@
+/mnt/c/Users/chdid/OneDrive/Desktop/Loyalty_streaming_project/processing/flink-processing/src/main/java/com/example/flink/LoyaltyPointsCalculator.java
+/mnt/c/Users/chdid/OneDrive/Desktop/Loyalty_streaming_project/processing/flink-processing/src/main/java/com/example/flink/models/Transaction.java
+/mnt/c/Users/chdid/OneDrive/Desktop/Loyalty_streaming_project/processing/flink-processing/src/main/java/com/example/flink/TransactionProcessingApp.java
+/mnt/c/Users/chdid/OneDrive/Desktop/Loyalty_streaming_project/processing/flink-processing/src/main/java/com/example/flink/TransactionParser.java
+/mnt/c/Users/chdid/OneDrive/Desktop/Loyalty_streaming_project/processing/flink-processing/src/main/java/com/example/flink/myKafkaSource.java
+/mnt/c/Users/chdid/OneDrive/Desktop/Loyalty_streaming_project/processing/flink-processing/src/main/java/com/example/flink/models/CustomerPoints.java

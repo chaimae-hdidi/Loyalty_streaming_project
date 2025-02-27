@@ -1,0 +1,6 @@
+com/example/flink/TransactionProcessingApp.class
+com/example/flink/LoyaltyPointsCalculator.class
+com/example/flink/myKafkaSource.class
+com/example/flink/models/Transaction.class
+com/example/flink/TransactionParser.class
+com/example/flink/models/CustomerPoints.class
